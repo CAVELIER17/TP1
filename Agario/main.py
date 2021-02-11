@@ -23,9 +23,11 @@ def run():
     for c in creeps:
         c.afficher(core)
 
+
     player1.afficher(core)
     if core.getMouseLeftClick() is not None:
         player1.deplacer(core.getMouseLeftClick())
+
 
 if __name__== '__main__':
     core.main(setup, run)
