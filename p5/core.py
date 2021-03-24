@@ -11,6 +11,7 @@ screen = None
 fps = 60
 loopLock = False
 WINDOW_SIZE = [100, 100]
+TITLE_WINDOW = "Window"
 width = 0
 height = 1
 mouseclickleft=[-1,-1]
@@ -52,7 +53,7 @@ def setup():
     screen = pygame.display.set_mode(WINDOW_SIZE)
 
     # Set title of screen
-    pygame.display.set_caption("Window")
+    pygame.display.set_caption(TITLE_WINDOW)
 
 
 def run():
