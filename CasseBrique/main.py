@@ -26,27 +26,49 @@ def setup():
     global bille1
 
     # Création player, bille, briques
-    player1 = Player()
+    player1 = Player((fen_x, fen_y))
     bille1 = Bille()
     for i in range(0, 22):
         for j in range(0, 8):
-            briques.append(Brique(i * 35, j * 35))
-
+            briques.append(Brique(i * entraxeB, j * entraxeB))
 
 
 def run():
-    # print("Run")
-    player1.afficher(core, fen_y)
-
     for b in briques:
         b.afficher(core)
 
-    bille1.afficher(core, pygame.mouse.get_pos())
-    player1.deplacer(pygame.mouse.get_pos())
-    for t in briques:
-        if t.position.x < bille1.position.x < t.position.x + entraxeB and t.position.y < bille1.position.y - (
-                bille1.taille + 1) < t.position.y + entraxeB:
-            t.val = t.val - 1
+    if bille1.start:
+
+        player1.afficher(core)
+        bille1.afficher(core)
+
+        player1.deplacer(pygame.mouse.get_pos())
+        bille1.deplacer((bille1.position.x - bille1.direction.x, bille1.position.y + bille1.direction.y))
+
+        for t in briques:
+            if t.val <= 0:
+                briques.remove(t)
+            if t.position.x < bille1.position.x < t.position.x + entraxeB and t.position.y < bille1.position.y < t.position.y + entraxeB:
+                bille1.direction.y = -bille1.direction.y
+                t.val = t.val - 1
+
+        if not bille1.taille <= bille1.position.x <= fen_x - bille1.taille:
+            bille1.direction.x = -bille1.direction.x
+
+        if bille1.position.y + bille1.taille >= player1.position.y + player1.taille / 2 and player1.position.x - player1.largeur <= bille1.position.y <= player1.position.x + player1.largeur:
+            bille1.direction.y = -bille1.direction.y
+
+    else:
+        player1.afficher(core)
+        bille1.deplacer((fen_x / 2, player1.position.y - player1.hauteurplayer - (player1.taille / 2) - bille1.taille))
+        bille1.afficher(core)
+
+        if core.getMouseLeftClick():
+            bille1.direction.x = (bille1.position.x - pygame.mouse.get_pos()[0]) / 15
+            bille1.direction.y = (bille1.position.x - pygame.mouse.get_pos()[1]) / 15
+            pygame.mouse.set_pos(player1.position)
+            bille1.start = True
+
 
 
 if __name__ == '__main__':

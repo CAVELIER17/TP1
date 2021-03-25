@@ -22,6 +22,6 @@ class Player:
         self.position.x = position[0]
         self.position.y = position[1]
 
-    def afficher(self,core):
+    def afficher(self, core):
         if self.forme == "Rond":
             pygame.draw.circle(core.screen, (int(self.couleur.x), int(self.couleur.y), int(self.couleur.z)), (int(self.position.x), int(self.position.y)), self.taille)

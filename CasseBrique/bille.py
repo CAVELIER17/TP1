@@ -12,6 +12,10 @@ class Bille:
         self.couleur = Vector3(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.start = False
 
-    def afficher(self, core, position):
+    def deplacer(self, position):
         self.position = Vector2(position)
-        pygame.draw.circle(core.screen, self.couleur, position, self.taille)
+
+
+
+    def afficher(self, core):
+        pygame.draw.circle(core.screen, self.couleur, self.position, self.taille)
