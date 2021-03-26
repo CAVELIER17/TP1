@@ -45,17 +45,25 @@ def run():
         player1.deplacer(pygame.mouse.get_pos())
         bille1.deplacer((bille1.position.x - bille1.direction.x, bille1.position.y + bille1.direction.y))
 
+        #
         for t in briques:
             if t.val <= 0:
                 briques.remove(t)
-            if t.position.x < bille1.position.x < t.position.x + entraxeB and t.position.y < bille1.position.y < t.position.y + entraxeB:
+            if t.position.x-4 < bille1.position.x < t.position.x + entraxeB+4 and t.position.y-4 < bille1.position.y < t.position.y + entraxeB+4:
                 bille1.direction.y = -bille1.direction.y
-                t.val = t.val - 1
+                t.val = t.val - 30
 
+        # Rebond droite/gauche
         if not bille1.taille <= bille1.position.x <= fen_x - bille1.taille:
             bille1.direction.x = -bille1.direction.x
 
-        if bille1.position.y + bille1.taille >= player1.position.y + player1.taille / 2 and player1.position.x - player1.largeur <= bille1.position.y <= player1.position.x + player1.largeur:
+        # Rebond plafond
+        if (bille1.position.y - bille1.taille)<=0:
+            bille1.direction.y = -bille1.direction.y
+
+        # Rebond table
+        if (bille1.position.y + bille1.taille) >= (fen_y - (
+                player1.taille / 2) - player1.hauteurplayer) and player1.position.x - player1.largeur <= bille1.position.x <= player1.position.x + player1.largeur:
             bille1.direction.y = -bille1.direction.y
 
     else:
@@ -64,11 +72,10 @@ def run():
         bille1.afficher(core)
 
         if core.getMouseLeftClick():
-            bille1.direction.x = (bille1.position.x - pygame.mouse.get_pos()[0]) / 15
-            bille1.direction.y = (bille1.position.x - pygame.mouse.get_pos()[1]) / 15
-            pygame.mouse.set_pos(player1.position)
+            bille1.direction.x = 4#(bille1.position.x - pygame.mouse.get_pos()[0]) / 15
+            bille1.direction.y = -8#(bille1.position.x - pygame.mouse.get_pos()[1]) / 15
+            #pygame.mouse.set_pos(player1.position)
             bille1.start = True
-
 
 
 if __name__ == '__main__':
