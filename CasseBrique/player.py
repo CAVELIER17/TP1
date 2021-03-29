@@ -8,7 +8,7 @@ class Player:
     def __init__(self, fenetre):
         self.taille = 8
         self.fenetre = fenetre
-        self.largeur = 25
+        self.largeur = 30
         self.direction = Vector2(-5, -5)
         self.position = Vector2(fenetre[0]/2, fenetre[1])
         self.hauteurplayer = 50

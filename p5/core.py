@@ -11,7 +11,6 @@ screen = None
 fps = 60
 loopLock = False
 WINDOW_SIZE = [100, 100]
-TITLE_WINDOW = "Window"
 width = 0
 height = 1
 mouseclickleft=[-1,-1]
@@ -20,6 +19,8 @@ mouseclickright=[-1,-1]
 mouseclickR= False
 keyPress=False
 keyPressValue=None
+keyReleaseValue = None
+TITLE_WINDOW = "Windows"
 
 
 def noLoop():
@@ -37,6 +38,9 @@ def getkeyPress():
 
 def getkeyPressValue():
     return keyPressValue
+
+def getkeyRelease():
+    return keyReleaseValue
 
 
 
@@ -69,7 +73,7 @@ def main(setupf,runf):
     runfuntion = runf
     global setupfunction
     setupfunction = setupf
-    global mouseclickleft, mouseclickL, mouseclickright, mouseclickR,keyPress,keyPressValue
+    global mouseclickleft, mouseclickL, mouseclickright, mouseclickR,keyPress,keyPressValue, keyReleaseValue
 
     setup()
 
@@ -92,6 +96,7 @@ def main(setupf,runf):
                 keyPressValue = event.key
             elif event.type == pygame.KEYUP:
                 keyPressValue = None
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
 
                 if event.button == 1:
@@ -115,6 +120,13 @@ def main(setupf,runf):
                     mouseclickleft = event.pos
                 if mouseclickR:
                     mouseclickright = event.pos
+
+            if hasattr(event,'key'):
+                if keyPressValue:
+                    keyReleaseValue = event.key
+                else:
+                    keyReleaseValue = None
+
 
         clock.tick(fps)
         #print(clock.get_time())
