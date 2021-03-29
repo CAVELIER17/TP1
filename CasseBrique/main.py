@@ -1,4 +1,5 @@
 import pygame
+from pygame.constants import K_p, K_BREAK, K_q
 
 from p5 import core
 from CasseBrique.player import Player
@@ -41,6 +42,9 @@ def run():
     global pause
     global fronMTPause
 
+    # Fin du jeu
+    if pygame.key.get_pressed()[K_q]:
+        pygame.quit()
 
     for b in briques:
         b.afficher(core)
@@ -52,12 +56,11 @@ def run():
 
         bille1.deplacer((bille1.position.x - bille1.direction.x, bille1.position.y + bille1.direction.y))
 
-        #Mode Pause
-        if core.getkeyPress():
-            if core.getkeyPressValue() == fronMTPause and fronMTPause != 112:
-                    pause = not pause
-                    fronMTPause = core.getkeyPressValue()
-
+        # Mode Pause
+        if pygame.key.get_pressed()[K_p] and not fronMTPause or not pygame.key.get_pressed()[K_p] and fronMTPause:
+            if pygame.key.get_pressed()[K_p] and not fronMTPause:
+                pause = not pause
+            fronMTPause = not fronMTPause
 
         if pause:
             player1.deplacer((bille1.position.x, 0))
@@ -68,12 +71,12 @@ def run():
         for t in briques:
             if t.val <= 0:
                 briques.remove(t)
-            if t.position.x-4 < bille1.position.x < t.position.x + entraxeB+4 and t.position.y-4 < bille1.position.y < t.position.y + entraxeB+4:
+            if t.position.x - 4 < bille1.position.x < t.position.x + entraxeB + 4 and t.position.y - 4 < bille1.position.y < t.position.y + entraxeB + 4:
                 t.val = t.val - 15
-                if t.position.x-4 < bille1.position.x < t.position.x+2 or t.position.x + entraxeB-2 < bille1.position.x < t.position.x + entraxeB + 4:
+                if t.position.x - 4 < bille1.position.x < t.position.x + 2 or t.position.x + entraxeB - 2 < bille1.position.x < t.position.x + entraxeB + 4:
                     bille1.direction.x = -bille1.direction.x
 
-                if t.position.y-4 < bille1.position.y < t.position.y+2 or t.position.y + entraxeB-2 < bille1.position.y < t.position.y + entraxeB + 4:
+                if t.position.y - 4 < bille1.position.y < t.position.y + 2 or t.position.y + entraxeB - 2 < bille1.position.y < t.position.y + entraxeB + 4:
                     bille1.direction.y = -bille1.direction.y
 
         # Rebond droite/gauche
@@ -85,20 +88,21 @@ def run():
             bille1.direction.y = -bille1.direction.y
 
         # Rebond table
-        if (fen_y - (player1.taille / 2) - player1.hauteurplayer) <= (bille1.position.y + bille1.taille) <= (fen_y + (player1.taille / 2) - player1.hauteurplayer) and player1.position.x - player1.largeur <= bille1.position.x <= player1.position.x + player1.largeur:
-            if player1.position.x - player1.largeur <= bille1.position.x <= player1.position.x - player1.largeur+20 or player1.position.x + player1.largeur - 20 <= bille1.position.x <= player1.position.x + player1.largeur:
+        if (fen_y - (player1.taille / 2) - player1.hauteurplayer) <= (bille1.position.y + bille1.taille) <= (fen_y + (
+                player1.taille / 2) - player1.hauteurplayer) and player1.position.x - player1.largeur <= bille1.position.x <= player1.position.x + player1.largeur:
+            if player1.position.x - player1.largeur <= bille1.position.x <= player1.position.x - player1.largeur + 20 or player1.position.x + player1.largeur - 20 <= bille1.position.x <= player1.position.x + player1.largeur:
                 posx = bille1.direction.x
                 bille1.direction.x = -bille1.direction.y
                 bille1.direction.y = posx
             else:
                 bille1.direction.y = -bille1.direction.y
 
-        #RAZ
-        if bille1.position.y >= fen_y - player1.hauteurplayer+20:
-           demarrage = False
+        # RAZ
+        if bille1.position.y >= fen_y - player1.hauteurplayer + 20:
+            demarrage = False
 
     else:
-        #print(core.getkeyPressValue())
+        # print(core.getkeyPressValue())
 
         bille1.deplacer((fen_x / 2, fen_y - player1.hauteurplayer - (player1.taille / 2) - bille1.taille))
         player1.deplacer((fen_x / 2, 0))
