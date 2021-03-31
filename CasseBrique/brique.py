@@ -6,7 +6,7 @@ from pygame.math import Vector2, Vector3
 
 class Brique:
     def __init__(self, x, y):
-        self.val = random.choice([0, 3, 8, 12, 18])
+        self.val = random.choice([0, 0, 3, 8, 12, 18])
 
         if 1 <= self.val < 5:
             color = Vector3(0, 255, 0)

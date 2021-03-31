@@ -6,6 +6,7 @@ from pygame.constants import K_p, K_BREAK, K_q
 
 from CasseBrique.Page.perdu import Perdu
 from CasseBrique.Page.gagne import Gagne
+from CasseBrique.Page.pause import Pause
 from p5 import core
 from CasseBrique.player import Player
 from CasseBrique.brique import Brique
@@ -28,39 +29,31 @@ Zone = 2
 tempscore = 0
 
 def setup():
-    print("Setup START---------")
+
     # Initialisation fenetre
-    core.fps = 120*4
+    core.fps = 120*2
     core.WINDOW_SIZE = [fen_x, fen_y]
     core.TITLE_WINDOW = "Casse Brique"
 
 
 
     # Initialisation Variable
-    global player1, Findelapartie, bille1,Gagner,fontW
-    print(time.time())
-    fontW = pygame.font.Font('Police/WEST.TTF', 30)
-    print(time.time())
-
-    pygame.font.init()
+    global player1, Findelapartie, bille1, Gagner,fontW, pauseT
     Findelapartie = Perdu()
     Gagner = Gagne()
-    print(time.time())
+    pauseT = Pause()
+    fontW = pygame.font.Font('Police/WEST.TTF', 30)
 
     # Création player, bille, briques
     player1 = Player((fen_x, fen_y))
     bille1 = Bille()
     for i in range(0, 22):
-        for j in range(0, 10):
+        for j in range(0, 8):
             briques.append(Brique(i * entraxeB, j * entraxeB))
 
 
 def run():
-    global demarrage, fin, pause, fronMTPause, Score, Findelapartie, tempscore, Gagner
-
-    # Fin du jeu
-    if pygame.key.get_pressed()[K_q]:
-        pygame.quit()
+    global demarrage, fin, pause, fronMTPause, Score, Findelapartie, tempscore, Gagner, pause
 
     for b in briques:
         b.afficher(core)
@@ -70,13 +63,13 @@ def run():
     ScoreT = fontW.render("Score : " + str(Score), True, (255, 255, 255))
     core.screen.blit(ScoreT, (35, fen_y-30))
 
-    Gagner.YouWin((fen_x, fen_y))
+
 
     if fin:
         if len(briques) != 0:
-            Findelapartie.GameOver((fen_x, fen_y))
+            Findelapartie.afficher((fen_x, fen_y))
         else:
-            Gagner.YouWin((fen_x, fen_y))
+            Gagner.afficher((fen_x, fen_y))
 
         if core.getMouseLeftClick():
             fin = False
@@ -91,8 +84,8 @@ def run():
 
             if Score % 5 == 0 and Score != tempscore:
                 tempscore = Score
-                bille1.direction.x = bille1.direction.x*1.0125
-                bille1.direction.y = bille1.direction.y*1.0125
+                bille1.direction.x = bille1.direction.x*1.014
+                bille1.direction.y = bille1.direction.y*1.014
 
 
             # Mode Pause
@@ -103,6 +96,7 @@ def run():
 
             if pause:
                 player1.deplacer((bille1.position.x, 0))
+                pauseT.afficher((fen_x, fen_y))
             else:
                 player1.deplacer(pygame.mouse.get_pos())
 
@@ -154,8 +148,8 @@ def run():
             bille1.afficher(core)
 
             if core.getMouseLeftClick():
-                bille1.direction.x = 1/4
-                bille1.direction.y = -1.5/4
+                bille1.direction.x = 1/2
+                bille1.direction.y = -1.5/2
                 Score = 0
                 demarrage = True
 
