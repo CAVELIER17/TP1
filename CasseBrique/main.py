@@ -1,8 +1,11 @@
+import time
+
 import pygame
 from pygame.constants import K_p, K_BREAK, K_q
 
 
 from CasseBrique.Page.perdu import Perdu
+from CasseBrique.Page.gagne import Gagne
 from p5 import core
 from CasseBrique.player import Player
 from CasseBrique.brique import Brique
@@ -27,27 +30,33 @@ tempscore = 0
 def setup():
     print("Setup START---------")
     # Initialisation fenetre
-    core.fps = 120
+    core.fps = 120*4
     core.WINDOW_SIZE = [fen_x, fen_y]
     core.TITLE_WINDOW = "Casse Brique"
 
 
+
     # Initialisation Variable
-    global player1, Findelapartie, bille1
+    global player1, Findelapartie, bille1,Gagner,fontW
+    print(time.time())
+    fontW = pygame.font.Font('Police/WEST.TTF', 30)
+    print(time.time())
 
     pygame.font.init()
     Findelapartie = Perdu()
+    Gagner = Gagne()
+    print(time.time())
 
     # Création player, bille, briques
     player1 = Player((fen_x, fen_y))
     bille1 = Bille()
     for i in range(0, 22):
-        for j in range(0, 8):
+        for j in range(0, 10):
             briques.append(Brique(i * entraxeB, j * entraxeB))
 
 
 def run():
-    global demarrage, fin, pause, fronMTPause, Score, Findelapartie,tempscore
+    global demarrage, fin, pause, fronMTPause, Score, Findelapartie, tempscore, Gagner
 
     # Fin du jeu
     if pygame.key.get_pressed()[K_q]:
@@ -57,13 +66,17 @@ def run():
         b.afficher(core)
 
     # Affichage Score
-    fontW = pygame.font.Font('Police/WEST.TTF', 30)
+
     ScoreT = fontW.render("Score : " + str(Score), True, (255, 255, 255))
     core.screen.blit(ScoreT, (35, fen_y-30))
+
+    Gagner.YouWin((fen_x, fen_y))
 
     if fin:
         if len(briques) != 0:
             Findelapartie.GameOver((fen_x, fen_y))
+        else:
+            Gagner.YouWin((fen_x, fen_y))
 
         if core.getMouseLeftClick():
             fin = False
@@ -128,7 +141,8 @@ def run():
             if bille1.position.y >= fen_y - player1.hauteurplayer + 20:
                 fin = True
 
-
+            if len(briques) == 0:
+                fin = True
 
 
         else:
@@ -140,8 +154,8 @@ def run():
             bille1.afficher(core)
 
             if core.getMouseLeftClick():
-                bille1.direction.x = 1
-                bille1.direction.y = -1.5
+                bille1.direction.x = 1/4
+                bille1.direction.y = -1.5/4
                 Score = 0
                 demarrage = True
 

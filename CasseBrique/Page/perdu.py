@@ -8,5 +8,5 @@ class Perdu:
         self.fontBB = pygame.font.Font('Police/BloodBlocks.ttf', 150)
 
     def GameOver(self, fenetre):
-        self.gameover = self.fontBB.render("Game Over", True, (255, 255, 255))
+        self.gameover = self.fontBB.render("Game Over", True, (248, 101, 97))
         core.screen.blit(self.gameover, ((fenetre[0]-594)/2, (fenetre[1]-150)/2))
