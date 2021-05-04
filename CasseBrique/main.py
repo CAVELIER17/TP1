@@ -3,7 +3,7 @@ import time
 import pygame
 from pygame.constants import K_p, K_BREAK, K_q
 
-
+from CasseBrique.Page.accueil import Accueil
 from CasseBrique.Page.perdu import Perdu
 from CasseBrique.Page.gagne import Gagne
 from CasseBrique.Page.pause import Pause
@@ -14,11 +14,15 @@ from CasseBrique.bille import Bille
 
 
 # Initialisation Variable
+Niveaux = ["Facile", "Intermediaire", "Difficile", "Expert"]
+LongueurTXT = [4*35,9*35,6*35,5*35]
+Paccueil = []
 briques = []
 player1 = None
 bille1 = None
 fen_x = 770
 fen_y = 800
+dimBTN = (500,90)
 entraxeB = 35
 demarrage = False
 fin = False
@@ -27,6 +31,7 @@ fronMTPause = None
 Score =  0
 Zone = 2
 tempscore = 0
+difficulter = ""
 
 def setup():
 
@@ -38,7 +43,7 @@ def setup():
 
 
     # Initialisation Variable
-    global player1, Findelapartie, bille1, Gagner,fontW, pauseT
+    global player1, Findelapartie, bille1, Gagner,fontW, pauseT, LongueurTXT
     Findelapartie = Perdu()
     Gagner = Gagne()
     pauseT = Pause()
@@ -50,6 +55,12 @@ def setup():
     for i in range(0, 22):
         for j in range(0, 8):
             briques.append(Brique(i * entraxeB, j * entraxeB))
+
+    nb = 0
+    for NV in Niveaux:
+        posNv = ((fen_x - dimBTN[0]) / 2, 120 + dimBTN[1] * 2 * nb)
+        Paccueil.append(Accueil(posNv, dimBTN, NV, (255, 255, 255),LongueurTXT[nb]))
+        nb += 1
 
 
 def run():
@@ -140,14 +151,29 @@ def run():
 
 
         else:
-            # print(core.getkeyPressValue())
 
             bille1.deplacer((fen_x / 2, fen_y - player1.hauteurplayer - (player1.taille / 2) - bille1.taille))
             player1.deplacer((fen_x / 2, 0))
             player1.afficher(core)
             bille1.afficher(core)
 
+            for BTN in Paccueil:
+                BTN.afficher(core)
+
             if core.getMouseLeftClick():
+                posclic = core.getMouseLeftClick()
+                for nv in Paccueil:
+                    if nv.BTNclic(posclic):
+                        difficulter = nv.texte
+                        print(difficulter)
+                if difficulter == Niveaux[0]:
+                    print(1)
+                elif difficulter == Niveaux[1]:
+                    print(2)
+                elif difficulter == Niveaux[2]:
+                    print(3)
+                elif difficulter == Niveaux[3]:
+                    print(4)
                 bille1.direction.x = 1/2
                 bille1.direction.y = -1.5/2
                 Score = 0
